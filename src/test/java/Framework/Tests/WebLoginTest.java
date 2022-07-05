@@ -77,8 +77,7 @@ public  void beforeClass() {
     public void loginTest() throws InterruptedException{
 	   test= extentReports.createTest("loginTest");
        LoginLib loginLib=new LoginLib(driver);
-       loginLib.enterData(username,password);
-       Thread.sleep(2000);
+       loginLib.enterData(username,password);    
        loginLib.buttonClick();
        loginLib.logoutBtn();
        String btnText=loginLib.loginButtonTxt().toLowerCase();

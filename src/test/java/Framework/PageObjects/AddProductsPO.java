@@ -9,6 +9,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 
 
@@ -16,10 +18,12 @@ import org.openqa.selenium.support.PageFactory;
 public class AddProductsPO {
 
 	private WebDriver driver;
+	private WebDriverWait wait;
 
     public AddProductsPO(WebDriver driver){
         this.driver=driver;
         PageFactory.initElements(this.driver,this);
+         wait=new WebDriverWait(driver,30);
     }
 
     @FindBy(xpath = "//input[@data-test='username']")
@@ -41,6 +45,7 @@ public class AddProductsPO {
     private List<WebElement> prices;
     
     @FindBy(xpath="//option[@value='hilo']")
+    
     private WebElement selectSort;
     
     @FindBy(id="add-to-cart-sauce-labs-fleece-jacket")
@@ -104,12 +109,12 @@ public class AddProductsPO {
     }
     
     public WebElement selectSort(){
-    	
+    	wait.until(ExpectedConditions.elementToBeClickable(selectSort));
     	return selectSort;
     }
     
     public WebElement firstProduct(){
-    	
+    	wait.until(ExpectedConditions.elementToBeClickable(firstProduct));
     	return firstProduct;
     }
     
@@ -122,12 +127,12 @@ public class AddProductsPO {
     }
     
     public WebElement cart(){
-    	
+    	wait.until(ExpectedConditions.elementToBeClickable(cart));
     	return cart;
     }
     
     public WebElement removeBag(){
-    
+    	wait.until(ExpectedConditions.elementToBeClickable(removeBag));
     	return removeBag;
     }
     
@@ -150,6 +155,7 @@ public class AddProductsPO {
     }
     
     public WebElement continueBtn(){
+    	wait.until(ExpectedConditions.elementToBeClickable(continueBtn));
     	return continueBtn;
     }
     
