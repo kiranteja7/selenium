@@ -24,7 +24,7 @@ public class LoginPO {
     @FindBy(xpath = "//input[@data-test='password']")
     private WebElement Password;
 
-    @FindBy(xpath = "//input[@data-test='login-button']")
+    @FindBy(xpath = "//input[@id='login-button']")
     private WebElement loginBtn;
 
     @FindBy(xpath="//div[@class='bm-burger-button']")
@@ -32,6 +32,9 @@ public class LoginPO {
     
     @FindBy(id="logout_sidebar_link")
     private WebElement logoutBtn;
+    
+    @FindBy(xpath="//h3[@data-test='error']")
+    private WebElement errorMessage;
     
 
     public void acceptData(String username,String password){
@@ -52,5 +55,9 @@ public class LoginPO {
     public void logoutBtn() {
     	hamBtn.click();
     	logoutBtn.click();
+    }
+    
+    public String returnErrorMessage() {
+    	return errorMessage.getText();
     }
 }

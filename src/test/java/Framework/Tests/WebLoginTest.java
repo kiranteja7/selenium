@@ -3,7 +3,7 @@ package Framework.Tests;
 import Framework.FunctionLibrary.LoginLib
 
 ;
-import Utils.WebDriverManager;
+import Utils.WebDriverManage;
 import org.testng.annotations.BeforeClass;
 
 import java.io.File;
@@ -28,28 +28,31 @@ import org.testng.asserts.SoftAssert;
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.Status;
-import com.aventstack.extentreports.reporter.ExtentHtmlReporter;
+import com.aventstack.extentreports.reporter.ExtentSparkReporter;
 import com.aventstack.extentreports.reporter.configuration.Theme;
 
 
 public class WebLoginTest {
 
-    private WebDriverManager webDvrMgr;
+    private WebDriverManage webDvrMgr;
     private WebDriver driver;
-    public ExtentHtmlReporter htmlReport;
+    public ExtentSparkReporter htmlReport;
     public ExtentTest test;
     public ExtentReports extentReports;
 
     private SoftAssert sf;
-    String propFile="src/main/resources/base.prop";
+    String propFile="resources/base.prop";
     String url=Utils.DataProvider.getTestData(propFile,"url");
     String username=Utils.DataProvider.getTestData(propFile,"username");
     String password=Utils.DataProvider.getTestData(propFile,"password");
     String expected=Utils.DataProvider.getTestData(propFile,"expected");
+    String invalidusername=Utils.DataProvider.getTestData(propFile,"invalidusername");
+    String invalidpassword=Utils.DataProvider.getTestData(propFile,"invalidpassword");
+    String invalidexpected=Utils.DataProvider.getTestData(propFile,"*invalidexpected");
     
  @BeforeTest
 public void beforeSuite() {
-    	 htmlReport=new ExtentHtmlReporter(System.getProperty("user.dir")+"/test-output/myReport1.html");
+    	 htmlReport=new ExtentSparkReporter(System.getProperty("user.dir")+"/test-output/myReport1.html");
     	htmlReport.config().setDocumentTitle("Automation Report1");
     	htmlReport.config().setReportName("functional Report1");
     	htmlReport.config().setTheme(Theme.DARK);
@@ -63,7 +66,7 @@ public void beforeSuite() {
 
 @BeforeClass
 public  void beforeClass() {
-    webDvrMgr = new WebDriverManager();
+    webDvrMgr = new WebDriverManage();
     driver = webDvrMgr.launchBrowser("chrome");
     driver.get(url);
    }
@@ -74,15 +77,28 @@ public  void beforeClass() {
    }
 
    @Test
-    public void loginTest() throws InterruptedException{
-	   test= extentReports.createTest("loginTest");
+    public void validLogin() throws InterruptedException{
+	   test= extentReports.createTest("validLogin");
        LoginLib loginLib=new LoginLib(driver);
        loginLib.enterData(username,password);    
        loginLib.buttonClick();
        loginLib.logoutBtn();
        String btnText=loginLib.loginButtonTxt().toLowerCase();
-       sf.assertEquals(btnText,expected);
+       sf.assertEquals(btnText,invalidexpected);
        Reporter.log("logout succesfully done!!!");
+       driver.close();
+   }
+   
+   @Test
+   public void invalidLogin() throws InterruptedException {
+	   test= extentReports.createTest("invalidLogin");
+       LoginLib loginLib=new LoginLib(driver);
+       loginLib.enterData(invalidusername,invalidpassword);    
+       loginLib.buttonClick();
+       Thread.sleep(2000);
+       String errorMessage=loginLib.returnErrorMsg();
+       sf.assertEquals(errorMessage,expected);
+       Reporter.log(errorMessage);
        driver.close();
    }
    

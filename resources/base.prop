@@ -1,4 +1,7 @@
-url=https://www.saucedemo.com/
+url=https://www.saucedemo.com/v1/index.html
 username=standard_user
 password=secret_sauce
 expected=login
+invalidusername=xyze
+invalidpassword=xyze
+invalidexpected=Epic sadface: Username and password do not match any user in this service

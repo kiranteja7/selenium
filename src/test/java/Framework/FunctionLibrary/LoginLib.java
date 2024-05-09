@@ -34,5 +34,10 @@ public class LoginLib {
     	LoginPO loginPO = new LoginPO(driver);
     	loginPO.logoutBtn();
     }
+    
+    public String returnErrorMsg() {
+    	LoginPO loginPO = new LoginPO(driver);
+    	return loginPO.returnErrorMessage();
+    }
 
 }

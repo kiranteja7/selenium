@@ -25,21 +25,22 @@ import org.testng.asserts.SoftAssert;
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.Status;
-import com.aventstack.extentreports.reporter.ExtentHtmlReporter;
+import com.aventstack.extentreports.reporter.ExtentSparkReporter;
 import com.aventstack.extentreports.reporter.configuration.Theme;
 
 import Framework.FunctionLibrary.AddProductLib;
-import Utils.WebDriverManager;
+import Framework.FunctionLibrary.LoginLib;
+import Utils.WebDriverManage;
 
 public class AddProductsTest {
 
-	private WebDriverManager webDvrMgr;
+	private WebDriverManage webDvrMgr;
     private WebDriver driver;
-    public ExtentHtmlReporter htmlReport;
+    public ExtentSparkReporter htmlReport;
     public ExtentTest test;
     public ExtentReports extentReports;
-    String propFile="src/main/resources/base.prop";
-    String productDetails="src/main/resources/ProductDetails";
+    String propFile="resources/base.prop";
+    String productDetails="resources/ProductDetails";
     String url=Utils.DataProvider.getTestData(propFile,"url");
     String username=Utils.DataProvider.getTestData(propFile,"username");
     String password=Utils.DataProvider.getTestData(propFile,"password");    
@@ -51,7 +52,7 @@ public class AddProductsTest {
     
     @BeforeTest
     public void beforeSuite() {
-    	 htmlReport=new ExtentHtmlReporter(System.getProperty("user.dir")+"/test-output/myReport.html");
+    	 htmlReport=new ExtentSparkReporter(System.getProperty("user.dir")+"/test-output/myReport.html");
     	htmlReport.config().setDocumentTitle("Automation Report");
     	htmlReport.config().setReportName("functional Report");
     	htmlReport.config().setTheme(Theme.DARK);
@@ -65,82 +66,27 @@ public class AddProductsTest {
     
     @BeforeClass
     public  void beforeClass() {
-        webDvrMgr = new WebDriverManager();
+        webDvrMgr = new WebDriverManage();
         driver = webDvrMgr.launchBrowser("chrome");
         driver.get(url);
        }
 
     @BeforeMethod
        public void beforeMethod() {
+    	LoginLib loginLib=new LoginLib(driver);
+        loginLib.enterData(username,password);    
+        loginLib.buttonClick();
            sf=new SoftAssert();
        }
     
     @Test
     public void addProductTest() throws InterruptedException {
     	
-    	
     	 test= extentReports.createTest("addProductTest");
     	
     	AddProductLib add=new AddProductLib(driver);
-    	//user enters the credentials enters the website
-    	add.accessData(username, password);
-    		
-    	//Thread.sleep(3000);
     	
-    	
-    	//user clicks on the sort price from low to high and asserting the prices
-    	
-    	//Thread.sleep(3000);
-    	add.clickSort();
-    	add.clickselectSort();
-    	
-    	//Thread.sleep(3000);
-    	List<String> priceSorting=add.beforeSortPrices();
-    	List<String> afterPriceSort=add.checkSortedPrices();
-    	
-    	for(String price:priceSorting) {
-    		for(String afterPrice:afterPriceSort) {
-    			sf.assertEquals(price, afterPrice);
-    		}
-    	}
-    	
-    	//user adds 3 products into the cart
-    	//Thread.sleep(2000);
-    	
-    	add.addProductsToCart();
-    	//Thread.sleep(2000);
-    	
-    	
-    	//user clicks on cart
-    	add.clickOnCart();
-    	//Asserting to remove the second highest price in the cart
-    	String onCartBefSort=priceSorting.get(1);
-    	String onCartAftSort=afterPriceSort.get(1);
-    	sf.assertEquals(onCartBefSort, onCartAftSort);
-    	
-    	//Asserting the cart count before and after removing the items
-    	String cartcnt=add.checkCartNumber();
-    	sf.assertEquals(cartCount, cartcnt);
-    	
-    	//user removes the second item from the list
-    	add.removeProductFromCart();
-    	int count=Integer.parseInt(cartCount);
-    	count=count--;
-    	String countCart=String.valueOf(count);
-    	sf.assertEquals(countCart, cartcnt);
-    	
-    	//Thread.sleep(3000);
-    	//user clicks on checkout
-    	add.clickCheckOut();
-    	
-    	//user enters the credentials and clicks on continue
-    	add.addDetails(f_name,l_name,pos_code);
-    	//Thread.sleep(2000);
-    	add.continueBtn();
-    	
-    	//user clicks on finish button
-    	//Thread.sleep(2000);
-    	add.clickFinishBtn();   	
+    	add.addingItemsAndVerify();
     	
     }
     

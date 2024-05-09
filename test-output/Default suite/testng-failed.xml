@@ -3,17 +3,17 @@
 <suite name="Failed suite [Default suite]" guice-stage="DEVELOPMENT">
   <test thread-count="5" name="Default test(failed)">
     <classes>
-      <class name="Framework.Tests.WebLoginTest">
+      <class name="Framework.Tests.AddProductsTest">
         <methods>
-          <include name="beforeClass"/>
-          <include name="beforeMethod"/>
-          <include name="getResult"/>
           <include name="afterSuite"/>
+          <include name="addProductTest"/>
           <include name="tearDown"/>
-          <include name="loginTest"/>
           <include name="beforeSuite"/>
+          <include name="beforeMethod"/>
+          <include name="beforeClass"/>
+          <include name="getResult"/>
         </methods>
-      </class> <!-- Framework.Tests.WebLoginTest -->
+      </class> <!-- Framework.Tests.AddProductsTest -->
     </classes>
   </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->
